@@ -9,10 +9,10 @@ app.use(express.json());
 
 // PostgreSQL connection
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "authdb",
-  password: "Wizzym.60",
+  user: "authdb_j64n_user",
+  host: "dpg-d8t8od7lk1mc73ar21t0-a",
+  database: "authdb_j64n",
+  password: "pJUXtmClVm2Hy7FxegoCgiMgcIPbrVc1",
   port: 5432,
 });
 
