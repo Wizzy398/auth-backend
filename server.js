@@ -10,11 +10,27 @@ app.use(express.json());
 // PostgreSQL connection
 const pool = new Pool({
   user: "authdb_j64n_user",
-  host: "dpg-d8t8od7lk1mc73ar21t0-a",
+  host: "dpg-d8t8od7lk1mc73ar21t0-a.oregon-postgres.render.com",
   database: "authdb_j64n",
   password: "pJUXtmClVm2Hy7FxegoCgiMgcIPbrVc1",
   port: 5432,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
+
+// Create users table automatically
+pool.query(`
+  CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`)
+.then(() => console.log("Users table ready"))
+.catch(err => console.error("Table creation error:", err));
 
 // Test route
 app.get("/test", (req, res) => {
@@ -50,7 +66,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-
 // LOGIN API
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -80,7 +95,6 @@ app.post("/login", async (req, res) => {
 
   }
 });
-
 
 // Start server
 app.listen(process.env.PORT || 5000, () => {
