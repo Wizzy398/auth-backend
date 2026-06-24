@@ -37,6 +37,21 @@ app.get("/test", (req, res) => {
   res.send("TEST ROUTE WORKS");
 });
 
+// View all users
+app.get("/users", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT id, username, email, created_at FROM users ORDER BY id"
+    );
+
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message
+    });
+  }
+});
+
 // REGISTER API
 app.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
